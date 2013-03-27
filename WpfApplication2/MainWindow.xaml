@@ -1,0 +1,10 @@
+﻿<Window x:Class="WpfApplication2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="MainWindow" Height="600" Width="825" 
+        WindowStyle="None" MouseDown="OnMouseDown"
+        ResizeMode="NoResize"
+       >
+    <Frame x:Name="LoginForm" Source="LoginForm.xaml" NavigationUIVisibility="Hidden" />
+</Window>

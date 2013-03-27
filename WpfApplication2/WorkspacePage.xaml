@@ -1,0 +1,101 @@
+﻿<Page x:Class="WpfApplication2.WorkspacePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+	  Title="WorkspacePage" Background="{StaticResource ResourceKey=Test}" Height="600" Width="825" >
+    <Page.Resources>
+        <Style x:Name="SS" TargetType="MenuItem">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Margin" Value="5,0,5,0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="Background" Value="#FF005375" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid>
+                            <Border Name="Border" BorderThickness="1,1,1,1"  CornerRadius="0,0,0,0"  Height="30">
+                                <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center"  HorizontalAlignment="Center"
+                                                  ContentSource="Header"  Margin="1,1,1,1" RecognizesAccessKey="True"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#FFAD060C"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="#FF005375" />
+                            </Trigger>
+                           
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Background="Transparent">
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel HorizontalAlignment="Stretch"/>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+
+
+            <MenuItem Header="Настройки">
+                <MenuItem.Icon>
+                    <Image Source="Images/Settings.png" Margin="3,0,0,0" />
+                </MenuItem.Icon>
+                <MenuItem Header="Общие" >
+                    <MenuItem.Icon>
+                        <Image Source="Images/CommonSettings.png" Width="20" Height="20" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Уведомлений" >
+                    <MenuItem.Icon>
+                        <Image Source="Images/Notifications.png" Width="20" Height="20" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Информация" >
+                <MenuItem.Icon>
+                    <Image Source="Images/Information.png" Width="20" Height="20" />
+                </MenuItem.Icon>
+                <MenuItem Header="О программе" Background="Transparent" />
+            </MenuItem>
+            <MenuItem Header="Выход" HorizontalAlignment="Right" />
+        </Menu>
+        <TabControl Grid.Row="1" TabStripPlacement="Bottom" Background="{StaticResource ResourceKey=Test}">
+            <TabItem  Header="Электронный журнал">
+                <Grid>
+                    <DataGrid  Name="EDiaryGrid" Height="Auto" RowBackground="White" IsReadOnly="True" AlternatingRowBackground="LightGray">
+                        
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem   Header="Протокол изменений" >
+                <Grid>
+                    <DataGrid Name="ChangeLog" Height="Auto" RowBackground="White" IsReadOnly="True" AlternatingRowBackground="LightGray" >
+
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>

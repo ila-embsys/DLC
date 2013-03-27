@@ -1,0 +1,109 @@
+﻿<Page x:Class="WpfApplication2.Workspace"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      mc:Ignorable="d" 
+      Name="LoginPage" Height="600" Width="825" 
+	  Title="Workspace" Loaded="LoginPage_Loaded">
+    
+    <Grid VerticalAlignment="Bottom" Background="{StaticResource ResourceKey=Test}" Height="600" Width="825">
+        <Grid Name="MainGrid" ShowGridLines="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="0.32*" />
+                <RowDefinition Height="0.32*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0.9*" />
+                <ColumnDefinition Width="0.9*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Name="Close" Click="OnCloseButtonClick" Grid.Column="3" Content="X" FontSize="18" Width="30" Height="30" VerticalAlignment="Top" 
+                    HorizontalAlignment="Right" Margin="10" Background="Transparent" />
+            <Grid Name="LoginForm" ShowGridLines="False" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                <Grid.Background>
+                    <StaticResource ResourceKey="BG" />
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="1.2*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Right"
+                           Style="{StaticResource ResourceKey=TextBlockStyle}"
+                           Text="Логин" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Right"
+                           Style="{StaticResource ResourceKey=TextBlockStyle}"
+                           Text="Пароль" />
+
+                <TextBox Name="Login" Grid.Row="0" Grid.Column="1"  TabIndex="1"
+                         Style="{StaticResource ResourceKey=BoxStyle}"
+                         VerticalAlignment="Bottom" 
+                         HorizontalAlignment="Left" Width="246"
+                         />
+
+                <PasswordBox Name="Password" Grid.Row="1" Grid.Column="1"  TabIndex="2" 
+                             Style="{StaticResource ResourceKey=BoxStyle}"
+                             VerticalAlignment="Top"
+                             HorizontalAlignment="Left" Width="246"/>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
+                    <Button Name="Submit" Style = "{StaticResource ResourceKey=ButtonStyle}" 
+                            Content="{StaticResource ResourceKey=SubmitButtonContent}"
+                            Background="#FF005375"
+                            VerticalAlignment="Top"
+                            TabIndex="3" Click="OnLoginButtonClick"/>
+                    
+                    <Button Name="Cancel" Style="{StaticResource ResourceKey=ButtonStyle}"
+                            Content="{StaticResource ResourceKey=CancelButtonContent}"
+                            Background="#FFAD060C"
+                            VerticalAlignment="Top"
+                            TabIndex="4"
+                            Click="OnCancelButtonClick"
+                            />
+                </StackPanel>
+
+            </Grid>
+
+            <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height=".5*" />
+                </Grid.RowDefinitions>
+                <TextBlock VerticalAlignment="Bottom" 
+                           HorizontalAlignment="Center" 
+                           Text="{StaticResource ResourceKey=DLCName}"
+                           FontSize="24.5"
+                           Foreground="White"
+                           FontWeight="Medium"/>
+                <TextBlock Grid.Row="1" 
+                           VerticalAlignment="Top" 
+                           TextWrapping="Wrap" 
+                           HorizontalAlignment="Center" 
+                           Text="{StaticResource ResourceKey=UniverName}" 
+                           TextAlignment="Center" 
+                           FontSize="13"
+                           Foreground="#AAFFFFFF"
+                           FontWeight="Medium"/>
+            </Grid>
+
+          
+            <ProgressBar Name="Progress" Background="Transparent"   Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4"
+                         VerticalAlignment="Bottom"  Foreground="Gray" Height="8" Maximum="100" Margin="0,0,0,10" />
+        </Grid>
+    </Grid>
+</Page>
