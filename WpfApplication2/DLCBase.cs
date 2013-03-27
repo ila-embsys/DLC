@@ -21,6 +21,7 @@ namespace DLCLibrary
         public static string LOG_Filename = "Log.bin";
         public static string USER_Filename = "User.bin";
         public static string SETTINGS_Filename = "Settings.bin";
+        private readonly object _locker = new object();
 
         public DLCBase()
         {
@@ -29,19 +30,25 @@ namespace DLCLibrary
 
         public void Serialize(Object data, string path, string fileName)
         {
-            Stream writeData = File.Open(Path.Combine(path,fileName), FileMode.Create);
-            BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(writeData, data);
-            writeData.Close();
+            lock (_locker)
+            {
+                Stream writeData = File.Open(Path.Combine(path, fileName), FileMode.Create);
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(writeData, data);
+                writeData.Close();
+            }
         }
 
         public object Deserialize(string path, string fileName)
         {
-            Stream readData = File.Open(Path.Combine(path,fileName), FileMode.Open);
-            BinaryFormatter bf = new BinaryFormatter();
-            object returnValue = bf.Deserialize(readData);
-            readData.Close();
-            return returnValue;
+            lock (_locker)
+            {
+                Stream readData = File.Open(Path.Combine(path, fileName), FileMode.Open);
+                BinaryFormatter bf = new BinaryFormatter();
+                object returnValue = bf.Deserialize(readData);
+                readData.Close();
+                return returnValue;
+            }
         }
 
         public void DeleteFile(string path, string fileName)

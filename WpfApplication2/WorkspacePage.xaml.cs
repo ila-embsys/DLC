@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 using DLCLibrary;
 
 
@@ -26,7 +27,7 @@ namespace WpfApplication2
         public string mark { get; set; }
         public string date { get; set; }
         public string sign { get; set; }
-        public string color { get; set; }
+        //public string color { get; set; }
     }
 
     public class ChangeLogStructure
@@ -43,13 +44,26 @@ namespace WpfApplication2
     public partial class WorkspacePage : Page
     {
         private DE_IFMO_Checker checker;
+        private BackgroundWorker diaryGetter, changelogGetter;
+        private List<ChangeLogStructure> log;
+        private List<EDIaryStructure> diary;
 
         public WorkspacePage(DE_IFMO_Checker checker)
         {
             InitializeComponent();
             this.checker = checker;
-            EDiaryGrid.ItemsSource = PrepareDataForDiary();
-            ChangeLog.ItemsSource = PrepareDataForChangeLog();
+            this.diaryGetter = new BackgroundWorker();
+            this.changelogGetter = new BackgroundWorker();
+            diaryGetter.WorkerReportsProgress = true;
+            changelogGetter.WorkerReportsProgress = true;
+            diaryGetter.DoWork += DoGetDiary;
+            changelogGetter.DoWork += DoGetChangeLog;
+            diaryGetter.RunWorkerCompleted += GotDiary;
+            changelogGetter.RunWorkerCompleted += GotChangeLog;
+            EDiaryGrid.IsEnabled = false;
+            ChangeLog.IsEnabled = false;
+            diaryGetter.RunWorkerAsync();
+            changelogGetter.RunWorkerAsync();
         }
 
         private List<ChangeLogStructure> PrepareDataForChangeLog()
@@ -88,11 +102,51 @@ namespace WpfApplication2
                     mark = record[4],
                     date = record[5],
                     sign = record[6],
-                    color = record[7],
+                //    color = record[7],
                 });
             }
-
             return eDiary;
         }
+
+        private void DoGetDiary(object sender, DoWorkEventArgs e)
+        {
+            diaryGetter.ReportProgress(0);
+            diary = PrepareDataForDiary();
+            diaryGetter.ReportProgress(100);
+        }
+
+        private void DoGetChangeLog(object sender, DoWorkEventArgs e)
+        {
+            changelogGetter.ReportProgress(0);
+            log = PrepareDataForChangeLog();
+            changelogGetter.ReportProgress(100);
+        }
+
+        private void GotDiary(object sender, RunWorkerCompletedEventArgs e)
+        {
+            EDiaryGrid.IsEnabled = true;
+            EDiaryGrid.Visibility = System.Windows.Visibility.Visible;
+            EDiaryGrid.ItemsSource = diary;
+            GettingDiary.Visibility = System.Windows.Visibility.Hidden;
+            
+        }
+      
+
+        private void GotChangeLog(object sender, RunWorkerCompletedEventArgs e)
+        {
+            ChangeLog.IsEnabled = true;
+            ChangeLog.Visibility = System.Windows.Visibility.Visible;
+            ChangeLog.ItemsSource = log;
+            GettingLog.Visibility = System.Windows.Visibility.Hidden;
+        }
+
+        private void OnExitClick(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+      
+      
+
     }
 }
