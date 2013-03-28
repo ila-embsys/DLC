@@ -139,6 +139,8 @@ namespace DLCLibrary
                 string[] splited = Regex.Split(modified, "</td>");
                 rowsData.Add(splited.ToList<string>());
             }
+            if (!File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), LOG_Filename)))
+                Serialize(rowsData[0], Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), LOG_Filename);       
             return rowsData;
         }
 
@@ -158,14 +160,14 @@ namespace DLCLibrary
 
         public List<List<string>> GetEDiary()
         {
-          string response = TryAuthorize();
-          if (!response.Contains("Access is forbidden") && !response.Contains("Доступ запрещен") && response != null)
-          {
-              User user = new User();
-              Dictionary<string, string> data = user.GetUserData();
-              return GetEDiaryInternal(data["LOGIN"], data["GROUP"], data["UNIVER"], data["APPRENTICESHIP"], data["INTERVAL"]);
-          }
-          return null;
+            string response = TryAuthorize();
+            if (!response.Contains("Access is forbidden") && !response.Contains("Доступ запрещен") && response != null)
+            {
+                User user = new User();
+                Dictionary<string, string> data = user.GetUserData();
+                return GetEDiaryInternal(data["LOGIN"], data["GROUP"], data["UNIVER"], data["APPRENTICESHIP"], data["INTERVAL"]);
+            }
+            return null;
         }
 
         public List<List<string>> GetChangeLog()

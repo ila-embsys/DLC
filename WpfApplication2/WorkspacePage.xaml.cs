@@ -47,6 +47,7 @@ namespace WpfApplication2
         private BackgroundWorker diaryGetter, changelogGetter;
         private List<ChangeLogStructure> log;
         private List<EDIaryStructure> diary;
+        private List<List<string>> originalLog, originalDiary;
 
         public WorkspacePage(DE_IFMO_Checker checker)
         {
@@ -69,6 +70,7 @@ namespace WpfApplication2
         private List<ChangeLogStructure> PrepareDataForChangeLog()
         {
             List<List<string>> changeLog = checker.GetChangeLog();
+            originalLog = changeLog;
             List<ChangeLogStructure> EDiary = new List<ChangeLogStructure>();
             foreach (List<string> record in changeLog)
             {
@@ -90,6 +92,7 @@ namespace WpfApplication2
         private List<EDIaryStructure> PrepareDataForDiary()
         {
             List<List<string>> diary = checker.GetEDiary();
+            originalDiary = diary;
             List<EDIaryStructure> eDiary = new List<EDIaryStructure>();
             foreach (List<string> record in diary)
             {
@@ -102,7 +105,7 @@ namespace WpfApplication2
                     mark = record[4],
                     date = record[5],
                     sign = record[6],
-                //    color = record[7],
+                    //    color = record[7],
                 });
             }
             return eDiary;
@@ -128,9 +131,9 @@ namespace WpfApplication2
             EDiaryGrid.Visibility = System.Windows.Visibility.Visible;
             EDiaryGrid.ItemsSource = diary;
             GettingDiary.Visibility = System.Windows.Visibility.Hidden;
-            
+
         }
-      
+
 
         private void GotChangeLog(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -138,6 +141,18 @@ namespace WpfApplication2
             ChangeLog.Visibility = System.Windows.Visibility.Visible;
             ChangeLog.ItemsSource = log;
             GettingLog.Visibility = System.Windows.Visibility.Hidden;
+            int haveChanges = checker.CheckLogForUpdates(originalLog);
+            if (haveChanges > -1)
+            {
+                NotificationWindow w = new NotificationWindow(null);
+                foreach (List<string> l in originalLog)
+                    if (l.Count > 1)
+                        w.ShowNotification(l[2], l[3], l[4]);
+                w.ShowWindow(w);
+                //w.Show();
+            }
+            else
+                MessageBox.Show("NoChanges");
         }
 
         private void OnExitClick(object sender, RoutedEventArgs e)
@@ -145,8 +160,8 @@ namespace WpfApplication2
             Environment.Exit(0);
         }
 
-      
-      
+
+
 
     }
 }

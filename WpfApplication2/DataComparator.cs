@@ -16,28 +16,28 @@ namespace DLCLibrary
         }
         
         /*
-         * Return value = -1 : File Created and Data serialized
-         * Return value > 0 : Position of lastSavedLog in current. Number of new records
-         * Return value = 0 : All records are new
+         * Return value = -2 : File Created and Data serialized
+         * Return value >= 0 : Position of lastSavedLog in current. Number of new records
+         * Return value = -1: All records are new
          */
         public int CheckChangeLog(List<List<string>> current)
         {
             List<string> lastSavedLog;
-            if (File.Exists(Path.Combine(Environment.SpecialFolder.MyDocuments.ToString(), LOG_Filename)))
+            if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), LOG_Filename)))
             {
-                lastSavedLog = (List<string>)Deserialize(Environment.SpecialFolder.MyDocuments.ToString(), LOG_Filename);
+                lastSavedLog = (List<string>)Deserialize(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), LOG_Filename);
                 for (int i = 0; i < current.Count; i++)
                 {
                     if (Enumerable.SequenceEqual(current[i].OrderBy(t => t), lastSavedLog.OrderBy(t => t)))
                         return i;
                 }
-                return 0;
+                return -1;
             }
             else
             {
-                File.Create(Path.Combine(Environment.SpecialFolder.MyDocuments.ToString(), LOG_Filename));
-                Serialize(current[0], Environment.SpecialFolder.MyDocuments.ToString(), LOG_Filename);
-                return -1;
+                File.Create(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), LOG_Filename));
+                Serialize(current[0], Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), LOG_Filename);
+                return -2;
             }
 
         }
