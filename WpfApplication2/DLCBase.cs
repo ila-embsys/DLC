@@ -30,23 +30,19 @@ namespace DLCLibrary
 
         public void Serialize(Object data, string path, string fileName)
         {
-            lock (_locker)
+            using (var stream = File.Open(Path.Combine(path, fileName), FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
-                Stream writeData = File.Open(Path.Combine(path, fileName), FileMode.Create);
                 BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(writeData, data);
-                writeData.Close();
+                bf.Serialize(stream, data);
             }
         }
 
         public object Deserialize(string path, string fileName)
         {
-            lock (_locker)
+            using (var stream = File.Open(Path.Combine(path, fileName), FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                Stream readData = File.Open(Path.Combine(path, fileName), FileMode.Open);
                 BinaryFormatter bf = new BinaryFormatter();
-                object returnValue = bf.Deserialize(readData);
-                readData.Close();
+                object returnValue = bf.Deserialize(stream);
                 return returnValue;
             }
         }

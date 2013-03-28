@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Windows.Threading;
+
 using DLCLibrary;
 
 
@@ -49,9 +51,14 @@ namespace WpfApplication2
         private List<EDIaryStructure> diary;
         private List<List<string>> originalLog, originalDiary;
 
+        private DispatcherTimer logChecker;
         public WorkspacePage(DE_IFMO_Checker checker)
         {
             InitializeComponent();
+            logChecker = new DispatcherTimer();
+            logChecker.Interval = new TimeSpan(0, 0, 20);
+            logChecker.Tick += CheckLog;
+            logChecker.Start();
             this.checker = checker;
             this.diaryGetter = new BackgroundWorker();
             this.changelogGetter = new BackgroundWorker();
@@ -134,7 +141,6 @@ namespace WpfApplication2
 
         }
 
-
         private void GotChangeLog(object sender, RunWorkerCompletedEventArgs e)
         {
             ChangeLog.IsEnabled = true;
@@ -145,14 +151,14 @@ namespace WpfApplication2
             if (haveChanges > -1)
             {
                 NotificationWindow w = new NotificationWindow(null);
-                foreach (List<string> l in originalLog)
+                for (int i = 0; i < haveChanges; i++)
+                {
+                    List<string> l = originalLog[i];
                     if (l.Count > 1)
                         w.ShowNotification(l[2], l[3], l[4]);
-                w.ShowWindow(w);
-                //w.Show();
+                    w.ShowWindow(w);
+                }
             }
-            else
-                MessageBox.Show("NoChanges");
         }
 
         private void OnExitClick(object sender, RoutedEventArgs e)
@@ -160,8 +166,12 @@ namespace WpfApplication2
             Environment.Exit(0);
         }
 
-
-
-
+        private void CheckLog(object sender, EventArgs e)
+        {
+            EDiaryGrid.IsEnabled = false;
+            ChangeLog.IsEnabled = false;
+            changelogGetter.RunWorkerAsync();
+            diaryGetter.RunWorkerAsync();
+        }
     }
 }
