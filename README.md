@@ -1,1 +1,2 @@
-This is a simpLE README FILE
+This is a simple README file.
+Corrected by Readme-edits branch user.
